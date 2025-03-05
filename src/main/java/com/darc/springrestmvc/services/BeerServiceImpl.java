@@ -11,7 +11,8 @@ import java.util.*;
 
 @Slf4j
 @Service
-public class BeerServiceImpl implements BeerService {
+public
+class BeerServiceImpl implements BeerService {
 
     private Map<UUID, Beer> beerMap;
 
@@ -71,4 +72,37 @@ public class BeerServiceImpl implements BeerService {
         log.info("Get beer by id - in service: {}", id);
         return beerMap.get(id);
     }
+
+    @Override
+    public Beer saveNewBeer(Beer beer) {
+
+        Beer savedBeer = Beer.builder()
+                .id(UUID.randomUUID())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .beerName(beer.getBeerName())
+                .beerStyle(beer.getBeerStyle())
+                .quantityOnHand(beer.getQuantityOnHand())
+                .upc(beer.getUpc())
+                .price(beer.getPrice())
+                .build();
+
+        beerMap.put(savedBeer.getId(), savedBeer);
+
+        return savedBeer;
+    }
+
+    @Override
+    public void updateBeerById(UUID beerId, Beer beer) {
+
+       Beer existingBeer = beerMap.get(beerId);
+       existingBeer.setBeerName(beer.getBeerName());
+       existingBeer.setBeerStyle(beer.getBeerStyle());
+       existingBeer.setQuantityOnHand(beer.getQuantityOnHand());
+       existingBeer.setUpc(beer.getUpc());
+       existingBeer.setPrice(beer.getPrice());
+
+       beerMap.put(existingBeer.getId(), existingBeer);
+    }
+
 }
