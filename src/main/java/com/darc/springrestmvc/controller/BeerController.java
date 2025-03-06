@@ -21,8 +21,6 @@ public class BeerController {
 
     private final BeerService beerService;
 
-
-
     @RequestMapping(method = RequestMethod.GET)
     public List<Beer> listBeers() {
         return beerService.listBeers();
