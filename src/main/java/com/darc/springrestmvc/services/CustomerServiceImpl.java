@@ -2,6 +2,7 @@ package com.darc.springrestmvc.services;
 
 import com.darc.springrestmvc.model.Customer;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -78,5 +79,21 @@ public class CustomerServiceImpl implements CustomerService {
         existingCustomer.setCustomerName(customer.getCustomerName());
 
 //        customerMap.put(customerId, existingCustomer);
+    }
+
+    @Override
+    public void deleteById(UUID customerId) {
+
+        customerMap.remove(customerId);
+    }
+
+    @Override
+    public void updateCustomerByPatch(UUID customerId, Customer customer) {
+
+        Customer existingCustomer = customerMap.get(customerId);
+
+        if(StringUtils.hasText(customer.getCustomerName())) {
+            existingCustomer.setCustomerName(customer.getCustomerName());
+        }
     }
 }

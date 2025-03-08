@@ -46,4 +46,21 @@ public class CustomerController {
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("{customerId}")
+    public ResponseEntity deleteCustomer(@PathVariable("customerId") UUID customerId) {
+
+        customerService.deleteById(customerId);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PatchMapping("{customerId}")
+    public ResponseEntity updateCustomerByPatch(@PathVariable("customerId") UUID customerId, @RequestBody Customer customer) {
+
+        customerService.updateCustomerByPatch(customerId, customer);
+
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
 }
