@@ -103,7 +103,7 @@ class BeerServiceImpl implements BeerService {
        existingBeer.setUpc(beer.getUpc());
        existingBeer.setPrice(beer.getPrice());
 
-       beerMap.put(existingBeer.getId(), existingBeer);
+//       beerMap.put(existingBeer.getId(), existingBeer);
     }
 
     @Override
