@@ -3,6 +3,7 @@ package com.darc.springrestmvc.controller;
 import com.darc.springrestmvc.model.Customer;
 import com.darc.springrestmvc.services.CustomerService;
 import com.darc.springrestmvc.services.CustomerServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CustomerController.class)
@@ -79,19 +80,68 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.customerName", is(testCustomer.getCustomerName())));
     }
 
-//    @Test
-//    void newCustomer() {
-//    }
-//
-//    @Test
-//    void updateCustomer() {
-//    }
-//
-//    @Test
-//    void deleteCustomer() {
-//    }
-//
-//    @Test
-//    void updateCustomerByPatch() {
-//    }
+    @Test
+    void newCustomer() throws Exception {
+
+        Customer customer = customerServiceImpl.listCustomers().get(0);
+        customer.setVersion(null);
+        customer.setCustomerId(null);
+
+        given(customerService.saveCustomer(any(Customer.class))).willReturn(customerServiceImpl.listCustomers().get(1));
+
+        mockMvc.perform(post("/api/v1/customer")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isCreated())
+                .andExpect(header().exists("Location"));
+    }
+
+    @Test
+    void updateCustomer() throws Exception {
+
+        Customer customer = customerServiceImpl.listCustomers().get(0);
+
+        mockMvc.perform(put("/api/v1/customer/" + customer.getCustomerId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(customer)))
+                .andExpect(status().isNoContent());
+
+        verify(customerService).updateCustomerById(any(UUID.class), any(Customer.class));
+    }
+
+    @Test
+    void deleteCustomer() throws Exception{
+
+        Customer customer = customerServiceImpl.listCustomers().get(0);
+
+        mockMvc.perform(delete("/api/v1/customer/" + customer.getCustomerId())
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+
+        verify(customerService).deleteById(uuidArgumentCaptor.capture());
+
+        assertThat(customer.getCustomerId()).isEqualTo(uuidArgumentCaptor.getValue());
+    }
+
+    @Test
+    void updateCustomerByPatch() throws Exception{
+
+        Customer customer = customerServiceImpl.listCustomers().get(0);
+
+        Map<String, Object> customerMap = new HashMap<>();
+        customerMap.put("customerName", "Joe");
+
+        mockMvc.perform(patch("/api/v1/customer/" + customer.getCustomerId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(customerMap)))
+                .andExpect(status().isNoContent());
+
+        verify(customerService).updateCustomerByPatch(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
+
+        assertThat(customer.getCustomerId()).isEqualTo(uuidArgumentCaptor.getValue());
+        assertThat(customerMap.get("customerName")).isEqualTo(customer.getCustomerName());
+    }
 }
