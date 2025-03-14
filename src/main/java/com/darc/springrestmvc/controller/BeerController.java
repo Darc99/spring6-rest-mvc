@@ -35,7 +35,7 @@ public class BeerController {
 
         log.debug("Get beer Id was called in controller");
 
-        return beerService.getBeerById(beerId);
+        return beerService.getBeerById(beerId).orElseThrow(NotFoundException::new);
     }
 
     @PostMapping(BEER_PATH)
