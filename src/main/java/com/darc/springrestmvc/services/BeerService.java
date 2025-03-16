@@ -1,6 +1,6 @@
 package com.darc.springrestmvc.services;
 
-import com.darc.springrestmvc.model.Beer;
+import com.darc.springrestmvc.model.BeerDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,15 +8,15 @@ import java.util.UUID;
 
 public interface BeerService {
 
-    List<Beer> listBeers();
+    List<BeerDTO> listBeers();
 
-    Optional<Beer> getBeerById(UUID id);
+    Optional<BeerDTO> getBeerById(UUID id);
 
-    Beer saveNewBeer(Beer beer);
+    BeerDTO saveNewBeer(BeerDTO beer);
 
-    void updateBeerById(UUID beerId, Beer beer);
+    void updateBeerById(UUID beerId, BeerDTO beer);
 
     void deleteById(UUID beerId);
 
-    void updateBeerByPatch(UUID beerId, Beer beer);
+    void updateBeerByPatch(UUID beerId, BeerDTO beer);
 }
