@@ -76,7 +76,7 @@ class BeerControllerTest {
     @Test
     void getBeerById() throws Exception {
 
-        BeerDTO testBeer = beerServiceImpl.listBeers().get(0);
+        BeerDTO testBeer = beerServiceImpl.listBeers().getFirst();
 
         given(beerService.getBeerById(testBeer.getId())).willReturn(Optional.of(testBeer));
 

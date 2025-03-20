@@ -43,7 +43,8 @@ public class BeerController {
         BeerDTO saveBeer = beerService.saveNewBeer(beer);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Location", BEER_PATH + "/" + saveBeer.getId().toString());
+        headers.add("Location",
+                BEER_PATH + "/" + saveBeer.getId().toString());
 
         return new ResponseEntity(headers, HttpStatus.CREATED);
     }
