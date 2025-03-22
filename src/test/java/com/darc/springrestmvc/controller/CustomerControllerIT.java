@@ -54,7 +54,6 @@ class CustomerControllerIT {
 
     @Test
     void testCustomerIdNotFound() {
-
         assertThrows(NotFoundException.class, () -> {
             customerController.getCustomerById(UUID.randomUUID());
         });

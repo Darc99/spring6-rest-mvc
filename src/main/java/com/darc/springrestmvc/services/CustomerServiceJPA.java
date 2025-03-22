@@ -24,8 +24,8 @@ public class CustomerServiceJPA implements CustomerService {
     public List<CustomerDTO> listCustomers() {
 
         return customerRepository.findAll()
-                .stream().
-                map(customerMapper::customerToCustomerDTO)
+                .stream()
+                .map(customerMapper::customerToCustomerDTO)
                 .collect(Collectors.toList());
     }
 
