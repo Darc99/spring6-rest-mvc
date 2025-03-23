@@ -1,6 +1,6 @@
 package com.darc.springrestmvc.services;
 
-import com.darc.springrestmvc.model.Customer;
+import com.darc.springrestmvc.model.CustomerDTO;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,15 +8,15 @@ import java.util.UUID;
 
 public interface CustomerService {
 
-    List<Customer> listCustomers();
+    List<CustomerDTO> listCustomers();
 
-    Optional<Customer> getCustomerById(UUID customerId);
+    Optional<CustomerDTO> getCustomerById(UUID customerId);
 
-    Customer saveCustomer(Customer customer);
+    CustomerDTO saveCustomer(CustomerDTO customer);
 
-    void updateCustomerById(UUID customerId, Customer customer);
+    Optional<CustomerDTO> updateCustomerById(UUID customerId, CustomerDTO customer);
 
-    void deleteById(UUID customerId);
+    Boolean deleteById(UUID customerId);
 
-    void updateCustomerByPatch(UUID customerId, Customer customer);
+    Optional<CustomerDTO> updateCustomerByPatch(UUID customerId, CustomerDTO customer);
 }
