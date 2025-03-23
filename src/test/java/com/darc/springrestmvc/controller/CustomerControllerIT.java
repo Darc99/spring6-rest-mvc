@@ -113,8 +113,24 @@ class CustomerControllerIT {
         });
     }
 
+    @Rollback
+    @Transactional
     @Test
-    void deleteCustomer() {
+    void deleteCustomerById() {
+
+        Customer customer = customerRepository.findAll().get(0);
+        ResponseEntity responseEntity = customerController.deleteCustomer(customer.getCustomerId());
+
+        assertThat(customerRepository.findById(customer.getCustomerId()).isEmpty());
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(204));
+    }
+
+    @Test
+    void deleteCustomerByIdNotFound() {
+
+        assertThrows(NotFoundException.class, () -> {
+            customerController.deleteCustomer(UUID.randomUUID());
+        });
     }
 
     @Test

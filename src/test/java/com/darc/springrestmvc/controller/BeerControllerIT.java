@@ -136,4 +136,7 @@ class BeerControllerIT {
         });
     }
 
+    @Test
+    void testPatchBeer() {
+    }
 }
