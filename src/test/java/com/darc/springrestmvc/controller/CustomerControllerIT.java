@@ -134,6 +134,5 @@ class CustomerControllerIT {
     }
 
     @Test
-    void updateCustomerByPatch() {
-    }
+    void updateCustomerByPatch() {}
 }

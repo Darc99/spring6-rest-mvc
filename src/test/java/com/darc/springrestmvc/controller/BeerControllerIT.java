@@ -137,6 +137,5 @@ class BeerControllerIT {
     }
 
     @Test
-    void testPatchBeer() {
-    }
+    void testPatchBeer() {}
 }
