@@ -151,7 +151,8 @@ class CustomerControllerTest {
                 .content(objectMapper.writeValueAsString(customerMap)))
                 .andExpect(status().isNoContent());
 
-        verify(customerService).updateCustomerByPatch(uuidArgumentCaptor.capture(), customerArgumentCaptor.capture());
+        verify(customerService).updateCustomerByPatch(uuidArgumentCaptor
+                .capture(), customerArgumentCaptor.capture());
 
         assertThat(customer.getCustomerId()).isEqualTo(uuidArgumentCaptor.getValue());
         assertThat(customerArgumentCaptor.getValue().getCustomerName()).isEqualTo(customerMap.get("customerName"));
