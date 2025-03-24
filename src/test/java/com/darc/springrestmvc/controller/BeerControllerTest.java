@@ -107,6 +107,20 @@ class BeerControllerTest {
     }
 
     @Test
+    void testCreateBeerNullBeerName() throws Exception {
+
+        BeerDTO beer = BeerDTO.builder().build();
+
+        given(beerService.saveNewBeer(any(BeerDTO.class))).willReturn(beerServiceImpl.listBeers().get(1));
+
+        mockMvc.perform(post(BeerController.BEER_PATH)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(beer)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void testUpdateBeer() throws Exception {
 
         BeerDTO beer = beerServiceImpl.listBeers().getFirst();
@@ -158,4 +172,5 @@ class BeerControllerTest {
         assertThat(beerArgumentCaptor.getValue().getBeerName()).isEqualTo(beerMap.get("beerName"));
 //        assertThat(beerMap.get("beerName")).isEqualTo(beer.getBeerName());
     }
+
 }
