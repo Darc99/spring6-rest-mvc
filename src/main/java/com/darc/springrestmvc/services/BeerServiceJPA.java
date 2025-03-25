@@ -84,7 +84,6 @@ public class BeerServiceJPA implements BeerService {
             if (beer.getBeerStyle() != null) {
                 foundBeer.setBeerStyle(beer.getBeerStyle());
             }
-
             if (beer.getPrice() != null) {
                 foundBeer.setPrice(beer.getPrice());
             }
