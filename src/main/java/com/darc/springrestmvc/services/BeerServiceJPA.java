@@ -1,5 +1,6 @@
 package com.darc.springrestmvc.services;
 
+import com.darc.springrestmvc.entities.Beer;
 import com.darc.springrestmvc.mappers.BeerMapper;
 import com.darc.springrestmvc.model.BeerDTO;
 import com.darc.springrestmvc.repositories.BeerRepository;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,15 +24,25 @@ public class BeerServiceJPA implements BeerService {
     private final BeerMapper beerMapper;
 
     @Override
-    public List<BeerDTO> listBeers() {
+    public List<BeerDTO> listBeers(String beerName) {
+        List<Beer> beerList;
 
+        if (StringUtils.hasText(beerName)) {
+            beerList = listBeersByName(beerName);
+        } else {
+            beerList = beerRepository.findAll();
+        }
 //        findAll - to get a list of beers
 //        map - converting beer (entity) to beerDto
 //        collect - to collect it to a list
-        return beerRepository.findAll()
-                .stream()
+        return beerList.stream()
                 .map(beerMapper::beerToBeerDTO)
                 .collect(Collectors.toList());
+    }
+
+    List<Beer> listBeersByName(String beerName) {
+        //%(wildcard) is a sql convention - any name that contains the phrase
+        return beerRepository.findAllByBeerNameIsLikeIgnoreCase("%" + beerName + "%");
     }
 
     @Override
