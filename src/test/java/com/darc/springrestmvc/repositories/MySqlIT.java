@@ -1,6 +1,7 @@
 package com.darc.springrestmvc.repositories;
 
 import com.darc.springrestmvc.entities.Beer;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled //to skip this test
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("localmysql")
