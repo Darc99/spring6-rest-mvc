@@ -12,8 +12,7 @@ import java.util.*;
 
 @Slf4j
 @Service
-public
-class BeerServiceImpl implements BeerService {
+public class BeerServiceImpl implements BeerService {
 
     private Map<UUID, BeerDTO> beerMap;
 
@@ -63,7 +62,7 @@ class BeerServiceImpl implements BeerService {
     }
 
     @Override
-    public List<BeerDTO> listBeers(String beerName){
+    public List<BeerDTO> listBeers(String beerName, BeerStyle beerStyle, Boolean showInventory){
         return new ArrayList<>(beerMap.values());
     }
 

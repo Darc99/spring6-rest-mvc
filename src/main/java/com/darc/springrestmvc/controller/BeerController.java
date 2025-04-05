@@ -1,6 +1,7 @@
 package com.darc.springrestmvc.controller;
 
 import com.darc.springrestmvc.model.BeerDTO;
+import com.darc.springrestmvc.model.BeerStyle;
 import com.darc.springrestmvc.services.BeerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +26,10 @@ public class BeerController {
     private final BeerService beerService;
 
     @GetMapping(BEER_PATH)
-    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName) {
-        return beerService.listBeers(beerName);
+    public List<BeerDTO> listBeers(@RequestParam(required = false) String beerName,
+                                  @RequestParam(required = false) BeerStyle beerStyle,
+                                  @RequestParam(required = false) Boolean showInventory) {
+        return beerService.listBeers(beerName, beerStyle, showInventory);
     }
 
     @GetMapping(BEER_PATH_ID)

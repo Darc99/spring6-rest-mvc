@@ -3,8 +3,10 @@ package com.darc.springrestmvc.controller;
 import com.darc.springrestmvc.entities.Beer;
 import com.darc.springrestmvc.mappers.BeerMapper;
 import com.darc.springrestmvc.model.BeerDTO;
+import com.darc.springrestmvc.model.BeerStyle;
 import com.darc.springrestmvc.repositories.BeerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.core.IsNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +63,7 @@ class BeerControllerIT {
     @Test
     void testListBeers() {
 
-        List<BeerDTO> dtos = beerController.listBeers(null);
+        List<BeerDTO> dtos = beerController.listBeers(null, null,false);
 
         assertThat(dtos.size()).isEqualTo(2413);
     }
@@ -72,7 +74,7 @@ class BeerControllerIT {
     void testEmptyList() {
 
         beerRepository.deleteAll();
-        List<BeerDTO> dtos = beerController.listBeers(null);
+        List<BeerDTO> dtos = beerController.listBeers(null, null, false);
 
         assertThat(dtos.size()).isEqualTo(0);
     }
@@ -192,5 +194,49 @@ class BeerControllerIT {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()", is(336)));
 
+    }
+
+    @Test
+    void testListBeersByStyle() throws Exception {
+
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                .queryParam("beerStyle", BeerStyle.IPA.name()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(547)));
+    }
+
+    @Test
+    void testListBeersByStyleAndName() throws Exception {
+
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                .queryParam("beerName", "IPA")
+                .queryParam("beerStyle", BeerStyle.IPA.name()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(310)));
+
+    }
+
+    @Test
+    void testListBeersByStyleAndNameShowInventoryTrue() throws Exception {
+
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                    .queryParam("beerName", "IPA")
+                    .queryParam("beerStyle", BeerStyle.IPA.name())
+                    .queryParam("showInventory", "true"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(310)))
+                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.notNullValue()));
+    }
+
+    @Test
+    void testListBeersByStyleAndNameShowInventoryFalse() throws Exception {
+
+        mockMvc.perform(get(BeerController.BEER_PATH)
+                        .queryParam("beerName", "IPA")
+                        .queryParam("beerStyle", BeerStyle.IPA.name())
+                        .queryParam("showInventory", "false"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()", is(310)))
+                .andExpect(jsonPath("$.[0].quantityOnHand").value(IsNull.nullValue()));
     }
 }
