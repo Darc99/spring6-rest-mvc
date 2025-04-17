@@ -2,38 +2,45 @@ package com.darc.springrestmvc.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.UUID;
 
-@Builder
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
-public class Customer {
+@AllArgsConstructor
+@Builder
+public class BeerOrderLine {
 
     @Id
     @GeneratedValue(generator = "UUID")
     @UuidGenerator
-    @JdbcTypeCode(SqlTypes.CHAR) //added this because hibernate was trying to store a binary into a string. So this converts the uuid into a string
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false)
-    private UUID customerId;
-    private String customerName;
-
-    @Column(length = 255)
-    private String email;
+    private UUID id;
 
     @Version
     private Integer version;
-    private LocalDateTime createdDate;
-    private LocalDateTime modifiedDate;
 
-    @OneToMany(mappedBy = "customer")
-    private Set<BeerOrder> beerOrders;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime lastModifiedDate;
+
+    public boolean isNew() {
+        return this.id == null;
+    }
+
+    private Integer orderQuantity = 0;
+
+    private Integer quantityAllocated = 0;
 }
